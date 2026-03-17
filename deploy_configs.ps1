@@ -76,8 +76,13 @@ if ($Mode -eq "symlink" -or $Mode -eq "copy") {
 } else {
     Write-Host ""
     Write-Host "How would you like to deploy the configs?" -ForegroundColor Cyan
+    Write-Host ""
     Write-Host "  [1] Symlink  (requires Admin or Developer Mode; changes in repo apply instantly)"
     Write-Host "  [2] Copy     (plain file copy; re-run this script to update)"
+    Write-Host ""
+    Write-Host "  WARNING: Symlink mode links CS2 configs directly into this repo folder." -ForegroundColor Red
+    Write-Host "  If you move, rename, or delete the repo, the symlinks will break" -ForegroundColor Red
+    Write-Host "  and your configs will stop loading. Keep this folder in a stable location." -ForegroundColor Red
     Write-Host ""
     $choice = Read-Host "Enter 1 or 2"
     $mode = if ($choice -eq "2") { "copy" } else { "symlink" }

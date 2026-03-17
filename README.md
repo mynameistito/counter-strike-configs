@@ -226,7 +226,7 @@ Automatically execs `config_default_binds.cfg` before connecting (restores binds
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/mynameistito/CS2-Configs.git "F:\GitHub\mynameistito\CS2-Configs"
+git clone https://github.com/mynameistito/CS2-Configs.git
 ```
 
 ### 2. Deploy Configs
@@ -234,7 +234,7 @@ git clone https://github.com/mynameistito/CS2-Configs.git "F:\GitHub\mynameistit
 Run the setup script from any PowerShell window (no need to open as Administrator first):
 
 ```powershell
-cd "F:\GitHub\mynameistito\CS2-Configs"
+cd CS2-Configs
 .\deploy_configs.ps1
 ```
 
@@ -251,9 +251,12 @@ The script will ask how you want to deploy:
 | **[1] Symlink** | Links CS2's cfg files directly to the repo. Any `git pull` applies instantly — no re-running the script. The script auto-elevates to Administrator if needed. |
 | **[2] Copy** | Copies the files into the CS2 cfg directory. No elevation needed. Re-run the script after each `git pull` to update. |
 
-**Target directory:**
+> [!CAUTION]
+> **Symlink mode:** CS2's cfg files point directly into the cloned repo folder. If you move, rename, or delete the repo, **all symlinks will break and your configs will stop loading**. Keep the repo in a stable location.
+
+**Target directory:** Auto-detected from the Steam registry and library folders. Typically:
 ```
-C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\
+<SteamLibrary>\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\
 ```
 
 ### 3. Set Launch Options
