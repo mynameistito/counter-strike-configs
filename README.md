@@ -8,6 +8,19 @@ Personal Counter-Strike 2 configuration files. Includes binds, convars, crosshai
 
 ---
 
+## Table of Contents
+
+- [Launch Options](#launch-options)
+- [File Structure](#file-structure)
+- [Settings](#settings)
+- [Crosshair](#crosshair)
+- [Key Binds](#key-binds)
+- [Aliases & Server Shortcuts](#aliases--server-shortcuts)
+- [Installation](#installation)
+- [Updating](#updating)
+
+---
+
 ## Launch Options
 
 ```
