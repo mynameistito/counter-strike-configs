@@ -4,6 +4,8 @@ Personal Counter-Strike 2 configuration files. Includes binds, convars, crosshai
 
 **Steam:** [steamcommunity.com/id/mynameistito](https://steamcommunity.com/id/mynameistito/)
 
+![social preview](assets/social-preview.png)
+
 ---
 
 ## Launch Options

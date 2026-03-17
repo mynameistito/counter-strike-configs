@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>CS2 Configs — mynameistito</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1280px;
+    height: 640px;
+    overflow: hidden;
+    background: #0D0D0F;
+    font-family: Consolas, 'Courier New', monospace;
+    color: #F0F0F0;
+  }
+
+  .top-bar {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, #C8A84B, #E8832A, #C8A84B);
+  }
+
+  .main {
+    display: flex;
+    width: 100%;
+    height: 596px; /* 640 - 4px top - 40px bottom */
+  }
+
+  /* ── LEFT PANEL ── */
+  .left {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 56px;
+    gap: 28px;
+    position: relative;
+  }
+
+  .left::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 40px;
+    bottom: 40px;
+    width: 1px;
+    background: rgba(200, 168, 75, 0.2);
+  }
+
+  .crosshair {
+    display: block;
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 72px;
+    font-weight: 700;
+    color: #F0F0F0;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: #C8A84B;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .desc {
+    font-size: 15px;
+    color: #6B6B7A;
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+  }
+
+  /* ── RIGHT PANEL ── */
+  .right {
+    width: 55%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 28px 36px 28px;
+  }
+
+  .terminal-card {
+    width: 100%;
+    background: #111114;
+    border-radius: 8px;
+    border: 1px solid rgba(200, 168, 75, 0.18);
+    overflow: hidden;
+  }
+
+  .terminal-header {
+    background: #1A1A1F;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(200, 168, 75, 0.12);
+    height: 36px;
+  }
+
+  .terminal-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 12px;
+    color: #6B6B7A;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .win-controls {
+    display: flex;
+    align-items: stretch;
+    flex-shrink: 0;
+  }
+
+  .win-btn {
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #6B6B7A;
+    cursor: default;
+  }
+
+  .win-btn-close {
+    background: #C42B1C;
+    color: #F0F0F0;
+  }
+
+  .terminal-body {
+    padding: 8px 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    padding: 9px 20px;
+    gap: 16px;
+  }
+
+  .row:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .key-badge {
+    display: inline-block;
+    width: 230px;
+    padding: 4px 10px;
+    background: #1E1E24;
+    border: 1px solid rgba(200, 168, 75, 0.35);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #E8832A;
+    letter-spacing: 0.04em;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .arrow {
+    font-size: 14px;
+    color: #3A3A4A;
+    flex-shrink: 0;
+  }
+
+  .bind-desc {
+    font-size: 14px;
+    color: #F0F0F0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    width: 100%;
+    height: 40px;
+    background: #0D0D0F;
+    border-top: 1px solid rgba(200, 168, 75, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+  }
+
+  .bottom-url {
+    font-size: 13px;
+    color: #6B6B7A;
+    letter-spacing: 0.06em;
+  }
+
+  .bottom-url span {
+    color: #C8A84B;
+  }
+
+  .bottom-tag {
+    font-size: 12px;
+    color: #3A3A4A;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<div class="main">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+
+    <!-- Crosshair SVG -->
+    <svg class="crosshair" width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Top arm -->
+      <rect x="32" y="4" width="8" height="24" fill="#F0F0F0"/>
+      <!-- Bottom arm -->
+      <rect x="32" y="44" width="8" height="24" fill="#F0F0F0"/>
+      <!-- Left arm -->
+      <rect x="4" y="32" width="24" height="8" fill="#F0F0F0"/>
+      <!-- Right arm -->
+      <rect x="44" y="32" width="24" height="8" fill="#F0F0F0"/>
+      <!-- Center dot -->
+      <rect x="34" y="34" width="4" height="4" fill="#E8832A"/>
+    </svg>
+
+    <div class="title-block">
+      <div class="title">CS2<br>Configs</div>
+      <div class="subtitle">mynameistito</div>
+    </div>
+
+    <div class="desc">
+      Personal binds &amp; config files<br>
+      for Counter-Strike 2
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="terminal-card">
+
+      <div class="terminal-header">
+        <div class="terminal-title">~\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\</div>
+        <div class="win-controls">
+          <div class="win-btn">&#x2013;</div>
+          <div class="win-btn">&#x25A1;</div>
+          <div class="win-btn win-btn-close">&#x2715;</div>
+        </div>
+      </div>
+
+      <div class="terminal-body">
+
+        <div class="row">
+          <div class="key-badge">autoexec.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Entry point</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_allkeys.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">All key binds</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_aliases.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Aliases &amp; toggles</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_crosshair.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Crosshair settings</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_convars.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Game convars</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_default_binds.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Default binds</div>
+        </div>
+
+        <div class="row">
+          <div class="key-badge">config_surf_binds.cfg</div>
+          <div class="arrow">→</div>
+          <div class="bind-desc">Surf binds</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <div class="bottom-url">github.com/<span>mynameistito</span>/CS2-Configs</div>
+  <div class="bottom-tag">Counter-Strike 2 · Config</div>
+</div>
+
+</body>
+</html>
