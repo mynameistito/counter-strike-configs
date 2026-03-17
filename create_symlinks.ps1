@@ -78,6 +78,18 @@ if ($choice -eq "2") {
     $mode = "copy"
 } else {
     $mode = "symlink"
+
+    # Auto-elevate to Administrator if not already running elevated
+    $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator)
+
+    if (-not $isAdmin) {
+        Write-Host ""
+        Write-Host "Symlink mode requires elevation. Relaunching as Administrator..." -ForegroundColor Yellow
+        $scriptPath = $MyInvocation.MyCommand.Path
+        Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`"" -Verb RunAs
+        exit
+    }
 }
 
 Write-Host ""

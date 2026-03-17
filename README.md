@@ -228,11 +228,9 @@ Automatically execs `config_default_binds.cfg` before connecting (restores binds
 git clone https://github.com/mynameistito/CS2-Configs.git "F:\GitHub\mynameistito\CS2-Configs"
 ```
 
-### 2. Create Symlinks
+### 2. Deploy Configs
 
-Symlinks let CS2 read directly from the repo folder. Any `git pull` updates are live immediately — no copying needed.
-
-Open **PowerShell as Administrator** (or enable Developer Mode in Windows Settings), then run:
+Run the setup script from any PowerShell window (no need to open as Administrator first):
 
 ```powershell
 cd "F:\GitHub\mynameistito\CS2-Configs"
@@ -245,7 +243,12 @@ If you hit an execution policy error, run this first:
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-The script will output `[OK] filename.cfg -> path` for each successful link.
+The script will ask how you want to deploy:
+
+| Option | Description |
+|---|---|
+| **[1] Symlink** | Links CS2's cfg files directly to the repo. Any `git pull` applies instantly — no re-running the script. The script auto-elevates to Administrator if needed. |
+| **[2] Copy** | Copies the files into the CS2 cfg directory. No elevation needed. Re-run the script after each `git pull` to update. |
 
 **Target directory:**
 ```
@@ -276,10 +279,9 @@ AUTOEXEC EXECUTED
 
 ## Updating
 
-Since the CS2 cfg files are symlinks pointing to the repo, just pull:
-
 ```bash
 git pull
 ```
 
-Changes are live on the next map load or after running `exec autoexec.cfg` in console.
+- **Symlink mode:** changes are live immediately — just run `exec autoexec.cfg` in console.
+- **Copy mode:** re-run `.\create_symlinks.ps1` after pulling to push the updated files into CS2.
