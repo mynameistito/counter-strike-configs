@@ -1,15 +1,62 @@
 # CS2 Config Symlink Creator
 # Run as Administrator OR with Developer Mode enabled in Windows Settings.
 
-$source = "F:\GitHub\mynameistito\CS2-Configs"
-$target = "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg"
+$source = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-# Verify target directory exists
-if (-not (Test-Path $target)) {
-    Write-Error "Target directory not found: $target"
-    Write-Error "Make sure CS2 is installed at the default Steam path."
+# --- Auto-detect CS2 cfg directory ---
+function Find-CS2CfgPath {
+    $cs2Relative = "steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg"
+
+    # 1. Read Steam install path from registry
+    $steamRegPath = "HKCU:\Software\Valve\Steam"
+    $steamPath = $null
+    try {
+        $steamPath = (Get-ItemProperty -Path $steamRegPath -ErrorAction Stop).SteamPath
+        # Registry stores forward slashes on some installs
+        $steamPath = $steamPath -replace '/', '\'
+    } catch {
+        # Registry key not found, will fall through to manual check
+    }
+
+    # Collect all library folders to search
+    $libraryRoots = @()
+
+    if ($steamPath -and (Test-Path $steamPath)) {
+        $libraryRoots += $steamPath
+
+        # Parse libraryfolders.vdf for additional Steam libraries on other drives
+        $vdfPath = Join-Path $steamPath "steamapps\libraryfolders.vdf"
+        if (Test-Path $vdfPath) {
+            Get-Content $vdfPath | ForEach-Object {
+                if ($_ -match '"path"\s+"([^"]+)"') {
+                    $libraryRoots += $Matches[1] -replace '\\\\', '\'
+                }
+            }
+        }
+    }
+
+    # Also try the classic default path as a last resort
+    $libraryRoots += "C:\Program Files (x86)\Steam"
+
+    foreach ($root in $libraryRoots) {
+        $candidate = Join-Path $root $cs2Relative
+        if (Test-Path $candidate) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
+$target = Find-CS2CfgPath
+
+if (-not $target) {
+    Write-Error "Could not find the CS2 cfg directory automatically."
+    Write-Error "Make sure CS2 is installed and has been run at least once."
     exit 1
 }
+
+Write-Host "CS2 cfg path detected: $target" -ForegroundColor DarkGray
 
 # Get all .cfg files in the repo
 $cfgFiles = Get-ChildItem -Path $source -Filter "*.cfg"
