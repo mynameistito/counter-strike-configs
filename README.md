@@ -24,13 +24,14 @@ Personal Counter-Strike 2 configuration files. Includes binds, convars, crosshai
 
 ```
 CS2-Configs/
-├── autoexec.cfg            # Entry point — execs all other configs
-├── config_aliases.cfg      # Custom aliases and server shortcuts
-├── config_convars.cfg      # All game settings and convars
-├── config_crosshair.cfg    # Crosshair settings
+├── autoexec.cfg              # Entry point — execs all other configs
+├── config_aliases.cfg        # Custom aliases and server shortcuts
+├── config_convars.cfg        # All game settings and convars
+├── config_crosshair.cfg      # Crosshair settings
 ├── config_default_binds.cfg  # Standard competitive/DM binds
-├── config_surf_binds.cfg   # Surf-specific binds (swaps in/out automatically)
-└── deploy_configs.ps1      # PowerShell script to deploy configs into CS2 (symlink or copy)
+├── config_surf_binds.cfg     # Surf-specific binds (swaps in/out automatically)
+├── config_allkeys.cfg        # Diagnostic — binds every key to echo its name or "KEY NOT BOUND"
+└── deploy_configs.ps1        # PowerShell script to deploy configs into CS2 (symlink or copy)
 ```
 
 ### autoexec.cfg
