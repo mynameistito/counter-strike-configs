@@ -375,7 +375,15 @@ foreach ($gameKey in $selectedGames) {
         $linkPath = Join-Path $targetDir $file.Name
 
         if (Test-Path $linkPath) {
-            Remove-Item $linkPath -Force
+            $existing = Get-Item $linkPath -Force
+            if ($existing.LinkType -eq "SymbolicLink") {
+                Remove-Item $linkPath -Force
+            } else {
+                $backupPath = "$linkPath.backup"
+                if (Test-Path $backupPath) { Remove-Item $backupPath -Force }
+                Rename-Item -Path $linkPath -NewName "$($file.Name).backup" -Force
+                Write-Host "${ESC}[96m│${ESC}[0m  ${ESC}[33m⚠${ESC}[0m  backed up $($file.Name) → $($file.Name).backup"
+            }
         }
 
         if ($Mode -eq "copy") {
