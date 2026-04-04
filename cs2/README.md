@@ -51,9 +51,9 @@ exec config_crosshair.cfg
 
 ### Mouse & Sensitivity
 
-| Convar | Value |
-|---|---|
-| `sensitivity` | `1.25` |
+| Convar | Value | Option Var | Option |
+|---|---|---|---|
+| `sensitivity` | `0.625` | DPI | `3200`
 | `m_pitch` | `0.022` |
 | `m_yaw` | `0.022` |
 | `mouse_inverty` | `false` |
