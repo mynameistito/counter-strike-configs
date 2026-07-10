@@ -1,6 +1,6 @@
 # Counter-Strike Configs — mynameistito
 
-Personal config files for CS2, CSGO (legacy), and Counter-Strike: Source — managed via Git and deployed with a PowerShell script.
+Personal config files for CS2, CSGO (legacy), and Counter-Strike: Source — managed via Git and deployed with a TypeScript CLI.
 
 **Steam:** [steamcommunity.com/id/mynameistito](https://steamcommunity.com/id/mynameistito/)
 
@@ -15,8 +15,9 @@ counter-strike-configs/
 ├── cs2/               # Counter-Strike 2
 ├── csgo/              # Counter-Strike: Global Offensive (legacy) — coming soon
 ├── css/               # Counter-Strike: Source
-├── assets/
-└── deploy_configs.ps1 # Deployment script (symlink or copy)
+├── src/deploy.ts      # Deployment CLI (symlink or copy)
+├── package.json
+└── assets/
 ```
 
 See each folder's README for game-specific launch options, settings, and binds:
@@ -33,31 +34,31 @@ See each folder's README for game-specific launch options, settings, and binds:
 
 ```bash
 git clone https://github.com/mynameistito/CS2-Configs.git
-```
-
-### 2. Deploy
-
-Run from any PowerShell window — no need to open as Administrator first:
-
-```powershell
 cd CS2-Configs
-.\deploy_configs.ps1
 ```
 
-If you hit an execution policy error:
+### 2. Install
 
-```powershell
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+Requires [Node.js](https://nodejs.org/) 18+.
+
+```bash
+npm install
 ```
 
-The script prompts for game and mode interactively, or skip prompts by passing flags directly:
+### 3. Deploy
 
-```powershell
-.\deploy_configs.ps1 -Game cs2 -Mode copy
-.\deploy_configs.ps1 -Game all -Mode symlink
+```bash
+npm run deploy
 ```
 
-**`-Game`**
+The CLI prompts for game and mode interactively, or skip prompts by passing flags:
+
+```bash
+npm run deploy -- --game cs2 --mode copy
+npm run deploy -- --game all --mode symlink
+```
+
+**`--game` / `-g`**
 
 | Value | Description |
 |---|---|
@@ -66,11 +67,11 @@ The script prompts for game and mode interactively, or skip prompts by passing f
 | `css` | Counter-Strike: Source |
 | `all` | All installed games |
 
-**`-Mode`**
+**`--mode` / `-m`**
 
 | Value | Description |
 |---|---|
-| `symlink` | Links cfg files directly into the repo. `git pull` applies instantly. Auto-elevates to Admin. |
+| `symlink` | Links cfg files directly into the repo. `git pull` applies instantly. Auto-elevates to Admin on Windows. |
 | `copy` | Copies files into the game directory. No elevation needed. Re-run after each `git pull`. |
 
 > [!CAUTION]
@@ -93,4 +94,4 @@ git pull
 ```
 
 - **Symlink mode:** changes apply immediately — run `exec autoexec.cfg` in console.
-- **Copy mode:** re-run `.\deploy_configs.ps1` after pulling.
+- **Copy mode:** re-run `npm run deploy` after pulling.

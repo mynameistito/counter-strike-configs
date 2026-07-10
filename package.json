@@ -1,0 +1,23 @@
+{
+  "name": "counter-strike-configs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal Counter-Strike configs with a TypeScript deploy CLI",
+  "type": "module",
+  "scripts": {
+    "deploy": "tsx src/deploy.ts",
+    "build": "tsc",
+    "start": "node dist/deploy.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.7.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2"
+  }
+}
