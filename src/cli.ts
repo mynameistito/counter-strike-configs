@@ -7,6 +7,7 @@
 
 import { spawnSync } from "node:child_process";
 import {
+  appendFileSync,
   copyFileSync,
   existsSync,
   lstatSync,
@@ -17,8 +18,9 @@ import {
   renameSync,
   rmSync,
   symlinkSync,
+  writeFileSync,
 } from "node:fs";
-import { homedir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as p from "@clack/prompts";
@@ -41,9 +43,14 @@ const repoRoot = resolve(__dirname, "..");
 // CLI args
 // ---------------------------------------------------------------------------
 
-function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | "all" | "" } {
+function parseArgs(argv: string[]): {
+  mode: DeployMode | "";
+  games: GameKey[] | "all" | "";
+  elevatedLog: string;
+} {
   let mode: DeployMode | "" = "";
   let games: GameKey[] | "all" | "" = "";
+  let elevatedLog = "";
 
   const requireValue = (flag: string, next: string | undefined): string => {
     if (!next || next.startsWith("-")) {
@@ -86,6 +93,13 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
       continue;
     }
 
+    // Internal: elevated worker writes deploy output here for the parent terminal
+    if (arg === "--elevated-log") {
+      elevatedLog = requireValue(arg, next);
+      i++;
+      continue;
+    }
+
     if (arg === "--help" || arg === "-h") {
       printHelp();
       process.exit(0);
@@ -95,7 +109,7 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
     process.exit(1);
   }
 
-  return { mode, games };
+  return { mode, games, elevatedLog };
 }
 
 function printHelp(): void {
@@ -212,20 +226,76 @@ function isElevated(): boolean {
 function relaunchElevated(games: GameKey[], mode: DeployMode): boolean {
   const gameArg = games.join(",");
   const scriptPath = fileURLToPath(import.meta.url);
+  const logPath = join(tmpdir(), `cs-configs-deploy-${process.pid}-${Date.now()}.log`);
 
-  // process.execPath is bun when launched via `bun run dev`
-  const args = [scriptPath, "--mode", mode, "--game", gameArg];
+  // Hidden elevated worker; output is mirrored back via --elevated-log
+  const args = [
+    scriptPath,
+    "--mode",
+    mode,
+    "--game",
+    gameArg,
+    "--elevated-log",
+    logPath,
+  ];
   const argList = args.map((a) => `'${a.replace(/'/g, "''")}'`).join(", ");
   const workDir = repoRoot.replace(/'/g, "''");
   const exe = process.execPath.replace(/'/g, "''");
-  const psCommand = `$p = Start-Process -FilePath '${exe}' -WorkingDirectory '${workDir}' -ArgumentList @(${argList}) -Verb RunAs -Wait -PassThru; exit $p.ExitCode`;
+  const psCommand = [
+    "try {",
+    `  $p = Start-Process -FilePath '${exe}' -WorkingDirectory '${workDir}' -ArgumentList @(${argList}) -Verb RunAs -WindowStyle Hidden -Wait -PassThru;`,
+    "  if ($null -eq $p) { exit 1 }",
+    "  exit $p.ExitCode",
+    "} catch {",
+    "  exit 1",
+    "}",
+  ].join(" ");
 
   const result = spawnSync("powershell.exe", ["-NoProfile", "-Command", psCommand], {
-    stdio: "inherit",
-    windowsHide: false,
+    stdio: "ignore",
+    windowsHide: true,
   });
 
+  if (existsSync(logPath)) {
+    try {
+      const text = readFileSync(logPath, "utf8");
+      if (text.trim()) process.stdout.write(text.endsWith("\n") ? text : `${text}\n`);
+    } catch {
+      // ignore log read failures
+    }
+    try {
+      rmSync(logPath, { force: true });
+    } catch {
+      // ignore cleanup failures
+    }
+  }
+
   return result.status === 0;
+}
+
+function attachElevatedLog(logPath: string): void {
+  writeFileSync(logPath, "", "utf8");
+
+  const write = (...args: unknown[]) => {
+    const line = args.map((a) => (typeof a === "string" ? a : String(a))).join(" ");
+    try {
+      appendFileSync(logPath, `${line}\n`, "utf8");
+    } catch {
+      // ignore log write failures
+    }
+  };
+
+  const wrap =
+    (fn: (...args: unknown[]) => void) =>
+    (...args: unknown[]) => {
+      write(...args);
+      fn(...args);
+    };
+
+  console.log = wrap(console.log.bind(console));
+  console.error = wrap(console.error.bind(console));
+  console.warn = wrap(console.warn.bind(console));
+  console.info = wrap(console.info.bind(console));
 }
 
 // ---------------------------------------------------------------------------
@@ -325,9 +395,14 @@ function verifyDeploy(targetPath: string, mode: DeployMode): boolean {
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
-  const { mode: modeArg, games: gamesArg } = parseArgs(process.argv.slice(2));
+  const { mode: modeArg, games: gamesArg, elevatedLog } = parseArgs(process.argv.slice(2));
+  const isElevatedWorker = elevatedLog !== "";
 
-  p.intro(pc.bgCyan(pc.black(" counter-strike-configs ")));
+  if (isElevatedWorker) {
+    attachElevatedLog(elevatedLog);
+  } else {
+    p.intro(pc.bgCyan(pc.black(" counter-strike-configs ")));
+  }
 
   let selectedGames: GameKey[];
 
@@ -383,13 +458,14 @@ async function main(): Promise<void> {
   }
 
   if (mode === "symlink" && process.platform === "win32" && !isElevated()) {
-    p.log.warn("Symlink mode requires elevation. Relaunching as Administrator...");
+    p.log.warn("Symlink mode requires elevation. Approve the UAC prompt — deploy stays in this terminal.");
     const ok = relaunchElevated(selectedGames, mode);
     if (!ok) {
       p.log.error("UAC was cancelled or elevation failed.");
       p.outro("Try copy mode, or enable Windows Developer Mode for unprivileged symlinks.");
       process.exit(1);
     }
+    p.outro("Deploy finished.");
     process.exit(0);
   }
 
@@ -482,7 +558,11 @@ async function main(): Promise<void> {
   console.log(`${pc.cyan("└")}`);
   console.log();
 
-  p.outro("Deploy finished.");
+  if (isElevatedWorker) {
+    console.log("Deploy finished.");
+  } else {
+    p.outro("Deploy finished.");
+  }
 }
 
 main().catch((err) => {
