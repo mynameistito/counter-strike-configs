@@ -5,9 +5,8 @@
   "description": "Personal Counter-Strike configs with a TypeScript deploy CLI",
   "type": "module",
   "scripts": {
-    "deploy": "tsx src/deploy.ts",
-    "build": "tsc",
-    "start": "node dist/deploy.js"
+    "dev": "bun run src/cli.ts",
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=18"

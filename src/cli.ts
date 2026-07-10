@@ -55,7 +55,7 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
         console.error(`Invalid mode: '${next}'. Valid options: symlink, copy`);
         process.exit(1);
       }
-      mode = value;
+      mode = value as DeployMode;
       i++;
       continue;
     }
@@ -89,7 +89,7 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
 
 function printHelp(): void {
   console.log(`
-Usage: npm run deploy -- [options]
+Usage: bun run dev -- [options]
 
 Options:
   -g, --game <games>   cs2 | csgo | css | all | comma-separated (e.g. cs2,css)
@@ -97,9 +97,9 @@ Options:
   -h, --help          Show this help
 
 Examples:
-  npm run deploy
-  npm run deploy -- --game cs2 --mode copy
-  npm run deploy -- --game all --mode symlink
+  bun run dev
+  bun run dev -- --game cs2 --mode copy
+  bun run dev -- --game all --mode symlink
 `);
 }
 
@@ -202,15 +202,10 @@ function isElevated(): boolean {
 function relaunchElevated(games: GameKey[], mode: DeployMode): boolean {
   const gameArg = games.join(",");
   const scriptPath = fileURLToPath(import.meta.url);
-  const tsxCli = join(repoRoot, "node_modules", "tsx", "dist", "cli.mjs");
 
-  // Prefer tsx when running from source; fall back to node for compiled dist/
-  const nodeArgs =
-    scriptPath.endsWith(".ts") && existsSync(tsxCli)
-      ? [tsxCli, scriptPath, "--mode", mode, "--game", gameArg]
-      : [scriptPath, "--mode", mode, "--game", gameArg];
-
-  const argList = nodeArgs.map((a) => `'${a.replace(/'/g, "''")}'`).join(", ");
+  // process.execPath is bun when launched via `bun run dev`
+  const args = [scriptPath, "--mode", mode, "--game", gameArg];
+  const argList = args.map((a) => `'${a.replace(/'/g, "''")}'`).join(", ");
   const workDir = repoRoot.replace(/'/g, "''");
   const exe = process.execPath.replace(/'/g, "''");
   const psCommand = `Start-Process -FilePath '${exe}' -WorkingDirectory '${workDir}' -ArgumentList @(${argList}) -Verb RunAs -Wait`;
@@ -347,7 +342,7 @@ async function main(): Promise<void> {
       ],
     });
 
-    if (p.isCancel(picked)) {
+    if (p.isCancel(picked) || (picked !== "symlink" && picked !== "copy")) {
       p.cancel("Cancelled.");
       process.exit(0);
     }

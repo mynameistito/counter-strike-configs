@@ -15,7 +15,7 @@ counter-strike-configs/
 ├── cs2/               # Counter-Strike 2
 ├── csgo/              # Counter-Strike: Global Offensive (legacy) — coming soon
 ├── css/               # Counter-Strike: Source
-├── src/deploy.ts      # Deployment CLI (symlink or copy)
+├── src/cli.ts         # Deployment CLI (symlink or copy)
 ├── package.json
 └── assets/
 ```
@@ -39,23 +39,23 @@ cd CS2-Configs
 
 ### 2. Install
 
-Requires [Node.js](https://nodejs.org/) 18+.
+Requires [Bun](https://bun.sh/).
 
 ```bash
-npm install
+bun install
 ```
 
 ### 3. Deploy
 
 ```bash
-npm run deploy
+bun run dev
 ```
 
 The CLI prompts for game and mode interactively, or skip prompts by passing flags:
 
 ```bash
-npm run deploy -- --game cs2 --mode copy
-npm run deploy -- --game all --mode symlink
+bun run dev -- --game cs2 --mode copy
+bun run dev -- --game all --mode symlink
 ```
 
 **`--game` / `-g`**
@@ -94,4 +94,4 @@ git pull
 ```
 
 - **Symlink mode:** changes apply immediately — run `exec autoexec.cfg` in console.
-- **Copy mode:** re-run `npm run deploy` after pulling.
+- **Copy mode:** re-run `bun run dev` after pulling.
