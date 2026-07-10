@@ -283,16 +283,18 @@ function deployFile(
     symlinkSync(sourcePath, targetPath, "file");
     return { ok: true, message: `linked   ${fileName}` };
   } catch (err) {
-    if (!existsSync(targetPath)) {
-      try {
-        if (backedUp) {
-          renameSync(backupPath, targetPath);
-        } else if (previousSymlinkTarget) {
-          symlinkSync(previousSymlinkTarget, targetPath, "file");
-        }
-      } catch {
-        // best-effort restore
+    try {
+      // copyFileSync can leave a partial destination; remove it before restore
+      if (existsSync(targetPath) || isSymlink(targetPath)) {
+        rmSync(targetPath, { force: true });
       }
+      if (backedUp) {
+        renameSync(backupPath, targetPath);
+      } else if (previousSymlinkTarget) {
+        symlinkSync(previousSymlinkTarget, targetPath, "file");
+      }
+    } catch {
+      // best-effort restore
     }
 
     const detail = err instanceof Error ? err.message : String(err);
