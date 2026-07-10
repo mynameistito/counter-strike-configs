@@ -17,6 +17,7 @@ counter-strike-configs/
 ├── css/               # Counter-Strike: Source
 ├── src/cli.ts         # Deployment CLI (symlink or copy)
 ├── package.json
+├── tsconfig.json
 └── assets/
 ```
 
@@ -71,7 +72,7 @@ bun run dev -- --game all --mode symlink
 
 | Value | Description |
 |---|---|
-| `symlink` | Links cfg files directly into the repo. `git pull` applies instantly. Auto-elevates to Admin on Windows. |
+| `symlink` | Links cfg files directly into the repo. `git pull` applies instantly. May prompt for elevation on Windows. |
 | `copy` | Copies files into the game directory. No elevation needed. Re-run after each `git pull`. |
 
 > [!CAUTION]

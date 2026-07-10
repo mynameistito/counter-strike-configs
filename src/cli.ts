@@ -45,23 +45,31 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
   let mode: DeployMode | "" = "";
   let games: GameKey[] | "all" | "" = "";
 
+  const requireValue = (flag: string, next: string | undefined): string => {
+    if (!next || next.startsWith("-")) {
+      console.error(`Missing value for ${flag}. See --help for usage.`);
+      process.exit(1);
+    }
+    return next;
+  };
+
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     const next = argv[i + 1];
 
-    if ((arg === "--mode" || arg === "-m") && next) {
-      const value = next.toLowerCase();
+    if (arg === "--mode" || arg === "-m") {
+      const value = requireValue(arg, next).toLowerCase();
       if (value !== "symlink" && value !== "copy") {
         console.error(`Invalid mode: '${next}'. Valid options: symlink, copy`);
         process.exit(1);
       }
-      mode = value as DeployMode;
+      mode = value;
       i++;
       continue;
     }
 
-    if ((arg === "--game" || arg === "-g") && next) {
-      const value = next.toLowerCase();
+    if (arg === "--game" || arg === "-g") {
+      const value = requireValue(arg, next).toLowerCase();
       if (value === "all") {
         games = "all";
       } else {
@@ -82,6 +90,9 @@ function parseArgs(argv: string[]): { mode: DeployMode | ""; games: GameKey[] | 
       printHelp();
       process.exit(0);
     }
+
+    console.error(`Unknown argument: '${arg}'. See --help for usage.`);
+    process.exit(1);
   }
 
   return { mode, games };
@@ -169,7 +180,6 @@ function findCfgPath(game: GameKey): string | null {
       );
     case "csgo":
       return findFirstExisting(
-        join("steamapps", "common", "csgo legacy", "csgo", "cfg"),
         join("steamapps", "common", "Counter-Strike Global Offensive", "csgo", "cfg"),
       );
     case "css":
@@ -208,7 +218,7 @@ function relaunchElevated(games: GameKey[], mode: DeployMode): boolean {
   const argList = args.map((a) => `'${a.replace(/'/g, "''")}'`).join(", ");
   const workDir = repoRoot.replace(/'/g, "''");
   const exe = process.execPath.replace(/'/g, "''");
-  const psCommand = `Start-Process -FilePath '${exe}' -WorkingDirectory '${workDir}' -ArgumentList @(${argList}) -Verb RunAs -Wait`;
+  const psCommand = `$p = Start-Process -FilePath '${exe}' -WorkingDirectory '${workDir}' -ArgumentList @(${argList}) -Verb RunAs -Wait -PassThru; exit $p.ExitCode`;
 
   const result = spawnSync("powershell.exe", ["-NoProfile", "-Command", psCommand], {
     stdio: "inherit",
@@ -243,14 +253,22 @@ function deployFile(
   mode: DeployMode,
 ): { ok: boolean; message: string } {
   const fileName = sourcePath.split(/[/\\]/).pop()!;
+  const backupPath = `${targetPath}.backup`;
+  let backedUp = false;
+  let previousSymlinkTarget: string | null = null;
 
   if (existsSync(targetPath) || isSymlink(targetPath)) {
     if (isSymlink(targetPath)) {
+      try {
+        previousSymlinkTarget = readlinkSync(targetPath);
+      } catch {
+        previousSymlinkTarget = null;
+      }
       rmSync(targetPath, { force: true });
     } else {
-      const backupPath = `${targetPath}.backup`;
       if (existsSync(backupPath)) rmSync(backupPath, { force: true });
       renameSync(targetPath, backupPath);
+      backedUp = true;
       console.log(`  ${pc.cyan("│")}  ${pc.yellow("⚠")}  backed up ${fileName} → ${fileName}.backup`);
     }
   }
@@ -261,10 +279,22 @@ function deployFile(
       return { ok: true, message: `copied   ${fileName}` };
     }
 
-    // Prefer relative-looking absolute target; Windows needs junction/symlink privilege or Dev Mode
+    // Windows needs symlink privilege or Developer Mode
     symlinkSync(sourcePath, targetPath, "file");
     return { ok: true, message: `linked   ${fileName}` };
   } catch (err) {
+    if (!existsSync(targetPath)) {
+      try {
+        if (backedUp) {
+          renameSync(backupPath, targetPath);
+        } else if (previousSymlinkTarget) {
+          symlinkSync(previousSymlinkTarget, targetPath, "file");
+        }
+      } catch {
+        // best-effort restore
+      }
+    }
+
     const detail = err instanceof Error ? err.message : String(err);
     if (mode === "symlink") {
       return {
