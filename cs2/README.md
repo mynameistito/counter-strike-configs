@@ -229,14 +229,20 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 |---|---|
 | `ig` | `103.212.224.9:27015` |
 
-### Pace Surf
+#### [Pace Surf](https://pace.surf)
 
-| Alias | Server | Bind config |
-|---|---|---|
-| `paceez` | `103.193.80.27:27015` | `config_bhop_binds.cfg` |
-| `pacehard` | `103.193.80.27:27016` | `config_bhop_binds.cfg` |
+Automatically execs `config_surf_binds.cfg` before connecting.
+
+| Alias | Server IP |
+|---|---|
+| `paceez` | `103.193.80.27:27015` |
+| `pacehard` | `103.193.80.27:27016` |
 
 ### Jailbreak
+
+#### [Slime Servers](https://slimeserversau.com/)
+
+Automatically execs `config_jailbreak_binds.cfg` before connecting.
 
 | Alias | Server | Bind config |
 |---|---|---|
@@ -244,7 +250,9 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 
 ### Retakes — Sydney
 
-[KZG Servers](https://join.kzg.gg) — automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
+#### [KZG Servers](https://join.kzg.gg)
+
+Automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
 
 | Alias | Server |
 |---|---|
@@ -257,7 +265,9 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 
 ### KZ
 
-| Alias | Server |
-|---|---|
-| `kz` | `121.127.47.34:26855` |
-| `femboy` | `121.127.47.34:25064` |
+Automatically execs `config_kz_binds.cfg` before connecting.
+
+| Alias | Server IP | Server |
+|---|---|---|
+| `kz` | `121.127.47.34:26855` | Jings KZ |
+| `femboy` | `121.127.47.34:25064` | Femboy KZ |
