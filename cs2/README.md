@@ -194,18 +194,22 @@ Defined in `config_aliases.cfg`. Enter an alias in the developer console to run 
 | `radaron` | `cl_drawhud_force_radar 1` | Force radar visible |
 | `dc` | `disconnect` | Disconnect |
 
-### Pracc DM — Sydney
-
-| Alias | Server | Map |
-|---|---|---|
-| `dm` | `121.127.47.34:26764` | Mirage |
-| `dm2` | `121.127.47.34:26084` | Dust |
-
 ### Bhop
 
 | Alias | Server | Bind config |
 |---|---|---|
 | `bhop` | `103.212.227.17:27015` | `config_bhop_binds.cfg` |
+
+### Deathmatch — Sydney
+
+#### [Pracc](https://pracc.com/play)
+
+Automatically execs `config_default_binds.cfg` before connecting.
+
+| Alias | Server | Map |
+|---|---|---|
+| `dm` | `121.127.47.34:26764` | Mirage |
+| `dm2` | `121.127.47.34:26084` | Dust |
 
 ### Surf — Sydney
 
@@ -229,22 +233,30 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 |---|---|
 | `ig` | `103.212.224.9:27015` |
 
-### Pace Surf
+#### [Pace Surf](https://pace.surf)
 
-| Alias | Server | Bind config |
-|---|---|---|
-| `paceez` | `103.193.80.27:27015` | `config_bhop_binds.cfg` |
-| `pacehard` | `103.193.80.27:27016` | `config_bhop_binds.cfg` |
+Automatically execs `config_surf_binds.cfg` before connecting.
+
+| Alias | Server IP |
+|---|---|
+| `paceez` | `103.193.80.27:27015` |
+| `pacehard` | `103.193.80.27:27016` |
 
 ### Jailbreak
 
-| Alias | Server | Bind config |
-|---|---|---|
-| `jb` | `103.62.51.133:27128` | `config_jailbreak_binds.cfg` |
+#### [Slime Servers](https://slimeserversau.com/)
+
+Automatically execs `config_jailbreak_binds.cfg` before connecting.
+
+| Alias | Server |
+|---|---|
+| `jb` | `103.62.51.133:27128` |
 
 ### Retakes — Sydney
 
-[KZG Servers](https://join.kzg.gg) — automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
+#### [KZG Servers](https://join.kzg.gg)
+
+Automatically execs `config_default_binds.cfg` before connecting (restores binds after surf).
 
 | Alias | Server |
 |---|---|
@@ -257,7 +269,9 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 
 ### KZ
 
-| Alias | Server |
-|---|---|
-| `kz` | `121.127.47.34:26855` |
-| `femboy` | `121.127.47.34:25064` |
+Automatically execs `config_kz_binds.cfg` before connecting.
+
+| Alias | Server IP | Server |
+|---|---|---|
+| `kz` | `121.127.47.34:26855` | Jings KZ |
+| `femboy` | `121.127.47.34:25064` | Femboy KZ |
