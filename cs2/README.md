@@ -194,18 +194,17 @@ Defined in `config_aliases.cfg`. Enter an alias in the developer console to run 
 | `radaron` | `cl_drawhud_force_radar 1` | Force radar visible |
 | `dc` | `disconnect` | Disconnect |
 
-### Pracc DM — Sydney
+### Deathmatch — Sydney
+
+#### [Pracc](https://pracc.com/play)
+
+Automatically execs `config_dm_binds.cfg` before connecting.
 
 | Alias | Server | Map |
 |---|---|---|
 | `dm` | `121.127.47.34:26764` | Mirage |
 | `dm2` | `121.127.47.34:26084` | Dust |
 
-### Bhop
-
-| Alias | Server | Bind config |
-|---|---|---|
-| `bhop` | `103.212.227.17:27015` | `config_bhop_binds.cfg` |
 
 ### Surf — Sydney
 
@@ -244,9 +243,9 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 
 Automatically execs `config_jailbreak_binds.cfg` before connecting.
 
-| Alias | Server | Bind config |
-|---|---|---|
-| `jb` | `103.62.51.133:27128` | `config_jailbreak_binds.cfg` |
+| Alias | Server |
+|---|---|
+| `jb` | `103.62.51.133:27128` |
 
 ### Retakes — Sydney
 
