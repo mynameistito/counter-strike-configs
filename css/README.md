@@ -121,4 +121,4 @@ Defined in `config_aliases.cfg`. Enter an alias in the developer console to run 
 | Alias | Server | Bind config |
 |---|---|---|
 | `bhop` | `51.161.218.252:27051` | `config_bhop_binds.cfg` |
-| `priv` | `139.99.149.210:27060` | Surf binds (`config_surf_binds`) |
+| `priv` | `139.99.149.210:27060` | Surf binds (`config_surf_binds.cfg`) |

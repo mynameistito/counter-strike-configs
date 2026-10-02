@@ -26,12 +26,13 @@ In Steam, right-click **Counter-Strike 2 → Properties** and paste into Launch 
 cs2/
 ├── autoexec.cfg              # Entry point — execs all other configs
 ├── config_aliases.cfg        # Aliases and server shortcuts
+├── config_bhop_binds.cfg     # Bhop server binds
 ├── config_convars.cfg        # Game settings and convars
 ├── config_crosshair.cfg      # Crosshair settings
 ├── config_default_binds.cfg  # Standard competitive / DM binds
+├── config_jailbreak_binds.cfg # Jailbreak binds
 ├── config_kz_binds.cfg       # KZ-specific binds
-├── config_surf_binds.cfg     # Surf binds (swapped in/out via alias)
-└── config_allkeys.cfg        # Diagnostic — echoes every key name
+└── config_surf_binds.cfg     # Surf binds (swapped in/out via alias)
 ```
 
 ### autoexec.cfg
