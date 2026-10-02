@@ -34,8 +34,8 @@ See each folder's README for game-specific launch options, settings, and binds:
 ### 1. Clone
 
 ```bash
-git clone https://github.com/mynameistito/CS2-Configs.git
-cd CS2-Configs
+git clone https://github.com/mynameistito/counter-strike-configs.git
+cd counter-strike-configs
 ```
 
 ### 2. Install

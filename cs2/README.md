@@ -1,4 +1,4 @@
-# CS2 Configs
+# Counter-Strike 2 (CS2) Configs
 
 Config files for Counter-Strike 2.
 
@@ -26,12 +26,13 @@ In Steam, right-click **Counter-Strike 2 → Properties** and paste into Launch 
 cs2/
 ├── autoexec.cfg              # Entry point — execs all other configs
 ├── config_aliases.cfg        # Aliases and server shortcuts
+├── config_bhop_binds.cfg     # Bhop server binds
 ├── config_convars.cfg        # Game settings and convars
 ├── config_crosshair.cfg      # Crosshair settings
 ├── config_default_binds.cfg  # Standard competitive / DM binds
+├── config_jailbreak_binds.cfg # Jailbreak binds
 ├── config_kz_binds.cfg       # KZ-specific binds
-├── config_surf_binds.cfg     # Surf binds (swapped in/out via alias)
-└── config_allkeys.cfg        # Diagnostic — echoes every key name
+└── config_surf_binds.cfg     # Surf binds (swapped in/out via alias)
 ```
 
 ### autoexec.cfg
@@ -183,7 +184,7 @@ Automatically loaded via alias when connecting to a surf server. Key differences
 
 ## Aliases & Server Shortcuts
 
-Defined in `config_aliases.cfg`.
+Defined in `config_aliases.cfg`. Enter an alias in the developer console to run it; server aliases load the matching bind config before connecting where needed.
 
 ### Utility
 
@@ -200,6 +201,12 @@ Defined in `config_aliases.cfg`.
 | `dm` | `121.127.47.34:26764` | Mirage |
 | `dm2` | `121.127.47.34:26084` | Dust |
 
+### Bhop
+
+| Alias | Server | Bind config |
+|---|---|---|
+| `bhop` | `103.212.227.17:27015` | `config_bhop_binds.cfg` |
+
 ### Surf — Sydney
 
 #### [KZG Servers](https://join.kzg.gg)
@@ -209,7 +216,9 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 | Alias | Server IP | Difficulty |
 |---|---|---|
 | `easy` | `103.212.227.45:27030` | Easy |
+| `ez` | `103.212.227.45:27030` | Easy (short alias) |
 | `easy2` | `103.212.227.45:27015` | Easy 2 |
+| `ez2` | `103.212.227.45:27015` | Easy 2 (short alias) |
 | `hard` | `103.212.227.45:27090` | Hard |
 
 #### [Insanity Gaming](https://insanitygaming.net/forums/)
@@ -219,6 +228,19 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 | Alias | Server IP |
 |---|---|
 | `ig` | `103.212.224.9:27015` |
+
+### Pace Surf
+
+| Alias | Server | Bind config |
+|---|---|---|
+| `paceez` | `103.193.80.27:27015` | `config_bhop_binds.cfg` |
+| `pacehard` | `103.193.80.27:27016` | `config_bhop_binds.cfg` |
+
+### Jailbreak
+
+| Alias | Server | Bind config |
+|---|---|---|
+| `jb` | `103.62.51.133:27128` | `config_jailbreak_binds.cfg` |
 
 ### Retakes — Sydney
 
@@ -238,3 +260,4 @@ Automatically execs `config_surf_binds.cfg` before connecting.
 | Alias | Server |
 |---|---|
 | `kz` | `121.127.47.34:26855` |
+| `femboy` | `121.127.47.34:25064` |
