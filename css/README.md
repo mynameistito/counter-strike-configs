@@ -1,4 +1,4 @@
-# CS:Source Configs
+# Counter-Strike: Source (CS:S) Configs
 
 Config files for Counter-Strike: Source.
 
@@ -35,9 +35,11 @@ In Steam, right-click **Counter-Strike: Source → Properties** and paste into L
 ```
 css/
 ├── autoexec.cfg              # Entry point — execs all other configs
-├── config_aliases.cfg        # Aliases
+├── config_aliases.cfg        # Utility aliases and server shortcuts
+├── config_convars.cfg        # Network and game settings
 ├── config_default_binds.cfg  # Standard binds
-└── config_bhop_binds.cfg     # Bhop binds (r → sm_r)
+├── config_bhop_binds.cfg     # Bhop binds (r → sm_r)
+└── config_surf_binds.cfg     # Surf binds
 ```
 
 ### autoexec.cfg
@@ -46,10 +48,9 @@ css/
 exec config_aliases.cfg
 exec config_convars.cfg
 exec config_default_binds.cfg
-exec config_crosshair.cfg
 ```
 
-> `config_convars.cfg` and `config_crosshair.cfg` are not yet in the repo — add them as needed.
+The autoexec loads the aliases, convars, and default binds. Use the server aliases below to switch to the bhop or surf bind set.
 
 ---
 
@@ -104,8 +105,20 @@ Same as default with one difference:
 
 ---
 
-## Aliases
+## Aliases & Server Shortcuts
+
+Defined in `config_aliases.cfg`. Enter an alias in the developer console to run it.
+
+### Utility
 
 | Alias | Command | Description |
 |---|---|---|
 | `dc` | `disconnect` | Disconnect |
+| `cls` | `clear` | Clear the console |
+
+### Servers
+
+| Alias | Server | Bind config |
+|---|---|---|
+| `bhop` | `51.161.218.252:27051` | `config_bhop_binds.cfg` |
+| `priv` | `139.99.149.210:27060` | Surf binds (`config_surf_binds`) |
