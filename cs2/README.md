@@ -260,12 +260,13 @@ Automatically execs `config_default_binds.cfg` before connecting (restores binds
 
 | Alias | Server |
 |---|---|
-| `retakes1` / `rt1` | `121.127.47.35:26481` |
-| `retakes2` / `rt2` | `121.127.47.34:25891` |
-| `retakes3` / `rt3` | `121.127.47.33:25048` |
-| `retakes4` / `rt4` | `121.127.47.34:25045` |
-| `retakes5` / `rt5` | `121.127.47.35:25372` |
-| `retakes6` / `rt6` | `121.127.47.33:26958` |
+| `retakes1` / `rt1` | `121.127.47.40:26481` |
+| `retakes2` / `rt2` | `121.127.47.40:25891` |
+| `retakes3` / `rt3` | `121.127.47.41:25048` |
+| `retakes4` / `rt4` | `121.127.47.40:25045` |
+| `retakes5` / `rt5` | `121.127.47.40:25372` |
+| `retakes6` / `rt6` | `121.127.47.41:26958` |
+| `retakesmodded` / `rtm` | `121.127.47.40:26014` |
 
 ### KZ
 
